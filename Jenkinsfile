@@ -23,7 +23,7 @@ pipeline {
                 echo 'Deploying Spring Boot application...'
 
                 bat '''
-                    for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8081 ^| findstr LISTENING') do (
+                    for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8082 ^| findstr LISTENING') do (
                         taskkill /PID %%a /F
                     )
 
@@ -37,7 +37,7 @@ pipeline {
         stage('Verify') {
             steps {
                 echo 'Verifying Spring Boot deployment...'
-                bat 'curl -f http://localhost:8081/api/status'
+                bat 'curl -f http://localhost:8082/api/status'
             }
         }
     }
@@ -49,7 +49,7 @@ pipeline {
             echo 'CI/CD PIPELINE SUCCESSFUL'
             echo '============================================'
             echo 'Spring Boot application is running.'
-            echo 'URL: http://localhost:8081'
+            echo 'URL: http://localhost:8082'
         }
 
         failure {
