@@ -37,35 +37,6 @@ pipeline {
         stage('Verify') {
             steps {
                 echo 'Verifying Spring Boot deployment...'
-
-                bat 'curl -f http://localhost:8081/api/status'
-            }
-        }
-    }
-
-    post {
-
-        success {
-            echo '============================================'
-            echo 'CI/CD PIPELINE SUCCESSFUL'
-            echo '============================================'
-            echo 'Spring Boot application is running.'
-            echo 'URL: http://localhost:8081'
-        }
-
-        failure {
-            echo '============================================'
-            echo 'CI/CD PIPELINE FAILED'
-            echo '============================================'
-        }
-    }
-}
-
-
-        stage('Verify') {
-            steps {
-                echo 'Verifying Spring Boot deployment...'
-
                 bat 'curl -f http://localhost:8081/api/status'
             }
         }
