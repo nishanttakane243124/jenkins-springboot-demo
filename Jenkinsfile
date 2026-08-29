@@ -4,13 +4,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                echo 'Checking out source code...'
-                checkout scm
-            }
-        }
-
         stage('Test') {
             steps {
                 echo 'Running Maven tests...'
@@ -34,12 +27,40 @@ pipeline {
                         taskkill /PID %%a /F
                     )
 
-                    start "SpringBootApp" /B java -jar target\\jenkins-springboot-demo-0.0.1-SNAPSHOT.jar > springboot.log 2>&1
+                    start "SpringBootApp" /B java -jar target\\jenkins-springboot-demo-0.0.1-SNAPSHOT.jar
 
-                    timeout /t 10 /nobreak >nul
+                    powershell -Command "Start-Sleep -Seconds 10"
                 '''
             }
         }
+
+        stage('Verify') {
+            steps {
+                echo 'Verifying Spring Boot deployment...'
+
+                bat 'curl -f http://localhost:8081/api/status'
+            }
+        }
+    }
+
+    post {
+
+        success {
+            echo '============================================'
+            echo 'CI/CD PIPELINE SUCCESSFUL'
+            echo '============================================'
+            echo 'Spring Boot application is running.'
+            echo 'URL: http://localhost:8081'
+        }
+
+        failure {
+            echo '============================================'
+            echo 'CI/CD PIPELINE FAILED'
+            echo '============================================'
+        }
+    }
+}
+
 
         stage('Verify') {
             steps {
